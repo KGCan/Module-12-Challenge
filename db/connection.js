@@ -1,13 +1,10 @@
 const mysql = require ("mysql");
-var connection = mysql.newConnection({
-    // connection info
-    host: "localhost",
-    port: 3306,
 
+const connection = mysql.newConnection({
+    host: "localhost",
     // MySQL info
     user: "root",
     password: "BootcampMySQL88!",
-
     // database
     database: "employee_db",
 });
