@@ -10,7 +10,6 @@ const connection = mysql.newConnection({
 });
 
 // connect to the server and database
-
 connection.connect(function (err) {
     if (err) throw err;
 });

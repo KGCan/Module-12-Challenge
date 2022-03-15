@@ -1,12 +1,7 @@
-module.exports = {
-// === Initial Prompt ===
+const connection = require ("./connection");
 
-initialPrompt: {
-    type: "list",
-    name: "task", 
-    message: "Please select from the following options:",
-    choices: [
-        "View Employees", // viewEmployee();
-    ]
-}
+class DB {
+    constructor(connection) {
+        this.connection = connection;
+    }
 }
