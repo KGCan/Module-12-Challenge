@@ -118,9 +118,6 @@ function loadMainPrompts() {
               case "DELETE_DEPARTMENT":
                 deleteDepartment();
                 break;
-              case "SHOW_UTILIZED_BUDGET_BY_DEPARTMENT":
-                showUtilizedBudgetByDepartment();
-                break;
               case "SHOW_ROLES":
                 showRoles();
                 break;
@@ -138,3 +135,75 @@ function loadMainPrompts() {
 }
 
 // Show all employees
+
+function showEmployees () {
+    db.showAllEmployees()
+        .then(([rows]) => {
+            let employees = rows;
+            console.log("\n");
+            console.table(employees);
+        })
+        .then(() => loadMainPrompts());
+}
+
+// Show all employees that belong to a specific department
+function showEmployeesByDepartment() {
+    db.showAllDepartments()
+    .then(([rows]) => {
+        let departments = rows;
+        const departmentOptions = departments.map(({ id, name }) => ({
+          name: name,
+          value: id
+        }));
+
+        prompt([
+            {
+                type: "list",
+                name: "departmentId",
+                message: "Please select a department to see it's employees",
+                choices: departmentOptions
+              }
+        ])
+        .then(res => db.showEmployeesByDepartment(res.departmentId))
+        .then(([rows]) => {
+          let employees = rows;
+          console.log("\n");
+          console.table(employees);
+        })
+        .then(() => loadMainPrompts())
+    });
+}
+
+// Show all employees that report to a specific manager
+function showEmployeesByManager() {
+    db.showAllEmployees()
+      .then(([rows]) => {
+        let managers = rows;
+        const managerOptions = managers.map(({ id, first_name, last_name }) => ({
+          name: `${first_name} ${last_name}`,
+          value: id
+        }));
+  
+        prompt([
+          {
+            type: "list",
+            name: "managerId",
+            message: "Please select an employee to view thier manager",
+            choices: managerOptions
+          }
+        ])
+          .then(res => db.showEmployeesByManager(res.managerId))
+          .then(([rows]) => {
+            let employees = rows;
+            console.log("\n");
+            if (employees.length === 0) {
+              console.log("The selected employee has no assigned manager");
+            } else {
+              console.table(employees);
+            }
+          })
+          .then(() => loadMainPrompts())
+      });
+  }
+  
+  
