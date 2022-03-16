@@ -70,7 +70,7 @@ class DB {
     }
 
     // Show departments, join with employees and their roles and add up utilized department budget
-    viewDepartmentBudgets() {
+    showDepartmentBudgets() {
         return this.connection.promise().query(
           "SELECT department.id, department.name, SUM(role.salary) AS utilized_budget FROM employee LEFT JOIN role on employee.role_id = role.id LEFT JOIN department on role.department_id = department.id GROUP BY department.id, department.name;"
         );
