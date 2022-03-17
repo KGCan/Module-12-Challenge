@@ -1,12 +1,12 @@
-const mysql = require ("mysql");
+const mysql = require ("mysql2");
 
-const connection = mysql.newConnection({
+const connection = mysql.createConnection({
     host: "localhost",
     // MySQL info
     user: "root",
     password: "BootcampMySQL88!",
     // database
-    database: "employee_db",
+    database: "employees",
 });
 
 // connect to the server and database
