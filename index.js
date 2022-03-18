@@ -139,74 +139,58 @@ function prompt() {
 // Show all employees
 
 function showEmployees () {
-    db.showAllEmployees()
-        .then(([rows]) => {
-            let employees = rows;
-            console.log("\n");
-            console.table(employees);
-        })
-        .then(() => loadMainPrompts());
+  const query = `SELECT employee.id, employee.first_name, employee.last_name, role.title, department.name AS department, role.salary, CONCAT(manager.first_name, ' ', manager.last_name) AS manager
+  FROM employee
+  LEFT JOIN employee manager on manager.id = employee.manager_id
+  INNER JOIN role ON (role.id = employee.role_id)
+  INNER JOIN department ON (department.id = role.department_id)
+  ORDER BY employee.id;`;
+  connection.query(query, (err, res) => {
+    if (err) throw err;
+    console.log("\n");
+    console.log("SHOW ALL EMPLOYEES");
+    console.log("\n");
+    console.table(res);
+    prompt();
+  })
 }
 
 // Show all employees that belong to a specific department
 function showEmployeesByDepartment() {
-    db.showAllDepartments()
-    .then(([rows]) => {
-        let departments = rows;
-        const departmentOptions = departments.map(({ id, name }) => ({
-          name: name,
-          value: id
-        }));
-
-        prompt([
-            {
-                type: "list",
-                name: "departmentId",
-                message: "Please select a department to see it's employees",
-                choices: departmentOptions
-              }
-        ])
-        .then(res => db.showEmployeesByDepartment(res.departmentId))
-        .then(([rows]) => {
-          let employees = rows;
-          console.log("\n");
-          console.table(employees);
-        })
-        .then(() => loadMainPrompts())
-    });
+  const query = `SELECT department.name AS department, role.title, employee.id, employee.first_name, employee.last_name
+  FROM employee
+  LEFT JOIN role ON (role.id = employee.role_id)
+  LEFT JOIN department ON (department.id = role.department_id)
+  ORDER BY department.name;`;
+  connection.query(query, (err, res) => {
+      if (err) throw err;
+      console.log("\n");
+      console.log("SHOW EMPLOYEE BY DEPARTMENT");
+      console.log("\n");
+      console.table(res);
+      prompt();
+  });
 }
 
 // Show all employees that report to a specific manager
 function showEmployeesByManager() {
-    db.showAllEmployees()
-      .then(([rows]) => {
-        let managers = rows;
-        const managerOptions = managers.map(({ id, first_name, last_name }) => ({
-          name: `${first_name} ${last_name}`,
-          value: id
-        }));
-  
-        prompt([
-          {
-            type: "list",
-            name: "managerId",
-            message: "Please select an employee to view thier manager",
-            choices: managerOptions
-          }
-        ])
-          .then(res => db.showEmployeesByManager(res.managerId))
-          .then(([rows]) => {
-            let employees = rows;
-            console.log("\n");
-            if (employees.length === 0) {
-              console.log("The selected employee has no assigned manager");
-            } else {
-              console.table(employees);
-            }
-          })
-          .then(() => loadMainPrompts())
-      });
-  }
+  const query = `SELECT CONCAT(manager.first_name, ' ', manager.last_name) AS manager, department.name AS department, employee.id, employee.first_name, employee.last_name, role.title
+  FROM employee
+  LEFT JOIN employee manager on manager.id = employee.manager_id
+  INNER JOIN role ON (role.id = employee.role_id && employee.manager_id != 'NULL')
+  INNER JOIN department ON (department.id = role.department_id)
+  ORDER BY manager;`;
+  connection.query(query, (err, res) => {
+      if (err) throw err;
+      console.log("\n");
+      console.log("SHOW EMPLOYEE BY MANAGER");
+      console.log("\n");
+      console.table(res);
+      prompt();
+  });
+}
+
+// -------------------------------------------------------
 
 // Show all roles
 function showRoles() {
@@ -737,3 +721,65 @@ function newRole() {
 //     }
 //     )
 // }
+
+    // db.showAllEmployees()
+    //     .then(([rows]) => {
+    //         let employees = rows;
+    //         console.log("\n");
+    //         console.table(employees);
+    //     })
+    //     .then(() => loadMainPrompts());
+
+        // db.showAllDepartments()
+    // .then(([rows]) => {
+    //     let departments = rows;
+    //     const departmentOptions = departments.map(({ id, name }) => ({
+    //       name: name,
+    //       value: id
+
+    // prompt([
+      //             {
+      //                 type: "list",
+      //                 name: "departmentId",
+      //                 message: "Please select a department to see it's employees",
+      //                 choices: departmentOptions
+      //               }
+      //         ])
+      //         .then(res => db.showEmployeesByDepartment(res.departmentId))
+      //         .then(([rows]) => {
+      //           let employees = rows;
+      //           console.log("\n");
+      //           console.table(employees);
+      //         })
+      //         .then(() => loadMainPrompts())
+      //     });
+      // }
+        //   db.showAllEmployees()
+  //     .then(([rows]) => {
+  //       let managers = rows;
+  //       const managerOptions = managers.map(({ id, first_name, last_name }) => ({
+  //         name: `${first_name} ${last_name}`,
+  //         value: id
+  //       }));
+  
+  //       prompt([
+  //         {
+  //           type: "list",
+  //           name: "managerId",
+  //           message: "Please select an employee to view thier manager",
+  //           choices: managerOptions
+  //         }
+  //       ])
+  //         .then(res => db.showEmployeesByManager(res.managerId))
+  //         .then(([rows]) => {
+  //           let employees = rows;
+  //           console.log("\n");
+  //           if (employees.length === 0) {
+  //             console.log("The selected employee has no assigned manager");
+  //           } else {
+  //             console.table(employees);
+  //           }
+  //         })
+  //         .then(() => loadMainPrompts())
+  //     });
+  // }
