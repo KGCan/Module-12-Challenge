@@ -7,7 +7,7 @@ class DB {
     // Show all employees, join employees with roles and departments to display their corresponding roles, salaries, departments and managers
     showAllEmployees() {
         return this.connection.promise().query(
-            "SELECT employee.id, employee.first_name, employee.last_name, role.title, department.name AS department, role.salary, CONCAT(manager.first_name '', manager.last_name) AS manager FROM employee LEFT JOIN role on employee.role_id = role.id LEFT JOIN department on role.department_id = department.id LEFT JOIN employee manager on manager.id = employee.manager_id;"
+            "SELECT employee.id, employee.first_name, employee.last_name, role.title, department.name AS department, role.salary, CONCAT(manager.first_name, ' ', manager.last_name) AS manager FROM employee LEFT JOIN role on employee.role_id = role.id LEFT JOIN department on role.department_id = department.id LEFT JOIN employee manager on manager.id = employee.manager_id;"
         );
     }
 
@@ -27,14 +27,16 @@ class DB {
     // Delete an employee using the given id
     deleteEmployee(employeeId) {
         return this.connection.promise().query(
-            "DELETE FROM employee WHERE id = ?", employeeId
+            "DELETE FROM employee WHERE id = ?",
+            employeeId
         );
     }
 
     // Update employee's role using their id
     updateEmployeeRole(employeeId, roleId) {
         return this.connection.promise().query(
-            "UPDATE employee SET role_id = ? WHERE id = ?", [roleId, employeeId]
+            "UPDATE employee SET role_id = ? WHERE id = ?",
+            [roleId, employeeId]
         );
     }
 
@@ -65,7 +67,7 @@ class DB {
     // Show all departments
     showAllDepartments() {
         return this.connection.promise().query(
-          "SELECT department.id, department.name FROM department;"
+            "SELECT department.id, department.name FROM department;"
         );
     }
 
@@ -77,15 +79,15 @@ class DB {
     // Delete a department
     deleteDepartment(departmentId) {
         return this.connection.promise().query(
-        "DELETE FROM department WHERE id = ?",
-        departmentId
+            "DELETE FROM department WHERE id = ?",
+            departmentId
         );
     }
 
     // Show all employees in selected department, join with roles to show their role title. 
     showEmployeesByDepartment(departmentId) {
         return this.connection.promise().query(
-        "SELECT employee.id, employee.first_name, employee.last_name, role.title FROM employee LEFT JOIN role on employee.role_id = role.id LEFT JOIN department department on role.department_id = department.id WHERE department.id = ?;",
+            "SELECT employee.id, employee.first_name, employee.last_name, role.title FROM employee LEFT JOIN role on employee.role_id = role.id LEFT JOIN department department on role.department_id = department.id WHERE department.id = ?;",
         departmentId
         );
     }
@@ -93,7 +95,7 @@ class DB {
     // Show employees by manager, join with departments and roles to show their titles and department names
     showEmployeesByManager(managerId) {
         return this.connection.promise().query(
-          "SELECT employee.id, employee.first_name, employee.last_name, department.name AS department, role.title FROM employee LEFT JOIN role on role.id = employee.role_id LEFT JOIN department ON department.id = role.department_id WHERE manager_id = ?;",
+            "SELECT employee.id, employee.first_name, employee.last_name, department.name AS department, role.title FROM employee LEFT JOIN role on role.id = employee.role_id LEFT JOIN department ON department.id = role.department_id WHERE manager_id = ?;",
           managerId
         );
     }

@@ -1,7 +1,7 @@
+// will modify, going to combine prompts & connection into this main index file to simplify the code....
 const { prompt } = require("inquirer");
 const logo = require("asciiart-logo");
 const db = require("./db/prompts");
-const connect = require("./db/connection")
 require("console.table");
 
 start();
@@ -74,10 +74,6 @@ function loadMainPrompts() {
                   {
                     name: "Delete Department",
                     value: "DELETE_DEPARTMENT"
-                  },
-                  {
-                    name: "Show Total Utilized Budget By Department",
-                    value: "SHOW_UTILIZED_BUDGET_BY_DEPARTMENT"
                   },
                   {
                     name: "Quit",
