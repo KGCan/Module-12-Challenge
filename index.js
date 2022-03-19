@@ -93,11 +93,11 @@ function prompt() {
               break;
               
           case promptMessages.removeEmployee:
-              remove(`delete`);
+              remove('delete');
               break;
 
           case promptMessages.updateEmployeeRole:
-              remove(`role`);
+              remove('role');
               break;
 
           case promptMessages.showDepartments:
@@ -185,7 +185,7 @@ function showAllRoles() {
  // Add an employee
  async function newEmployee() {
   const addname = await inquirer.prompt(askName());
-  connection.query("SELECT role.id, role.title FROM role ORDER BY role.id;", async (err, res) => {
+  connection.query(`SELECT role.id, role.title FROM role ORDER BY role.id;`, async (err, res) => {
       if (err) throw err;
       const { role } = await inquirer.prompt([
           {
@@ -202,7 +202,7 @@ function showAllRoles() {
               continue;
           }
       }
-      connection.query("SELECT * FROM employee", async (err, res) => {
+      connection.query(`SELECT * FROM employee`, async (err, res) => {
           if (err) throw err;
           let choices = res.map(res => `${res.first_name} ${res.last_name}`);
           choices.push("none");
@@ -232,7 +232,7 @@ function showAllRoles() {
           }
           console.log("New employee has been entered, please view all employees to verify...");
           connection.query(
-              "INSERT INTO employee SET ?",
+              `INSERT INTO employee SET ?`,
               {
                   first_name: addname.first,
                   last_name: addname.last,
@@ -247,10 +247,10 @@ function showAllRoles() {
           );
       });
   });
-
+ }
 // Remove a role
 function remove(input) {
-  const promptQuery = {
+  const promptQ = {
     yes: "yes",
     no: "no I don't (view all employees on the main option)"
 };
@@ -260,7 +260,7 @@ inquirer.prompt([
         type: "list",
         message: "In order to proceed an employee ID must be entered. View all employees to get" +
             "the employee ID. Do you know the employee ID?",
-        choices: [promptQuery.yes, promptQuery.no]
+        choices: [promptQ.yes, promptQ.no]
     }
 ]).then(answer => {
     if (input === "delete" && answer.action === "yes") removeEmployee();
@@ -347,5 +347,4 @@ function askName() {
           message: "Enter the employee's last name: "
       }
   ]);
-}
 }
