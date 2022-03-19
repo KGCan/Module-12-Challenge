@@ -1,8 +1,9 @@
 "use strict";
 
-const { prompt } = require("inquirer");
+const mysql = require("mysql2");
+const inquirer = require("inquirer");
 const logo = require("asciiart-logo");
-const db = require("./db/prompts");
+// const db = require("./db/prompts");
 require("console.table");
 
 // Call start function to open app with logo
