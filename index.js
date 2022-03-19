@@ -3,7 +3,6 @@
 const mysql = require("mysql2");
 const inquirer = require("inquirer");
 const logo = require("asciiart-logo");
-// const db = require("./db/prompts");
 require("console.table");
 
 start();
@@ -94,11 +93,11 @@ function prompt() {
               break;
               
           case promptMessages.removeEmployee:
-              remove("delete");
+              remove(`delete`);
               break;
 
           case promptMessages.updateEmployeeRole:
-              remove("role");
+              remove(`role`);
               break;
 
           case promptMessages.showDepartments:
