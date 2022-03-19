@@ -64,7 +64,6 @@ function prompt() {
         promptMessages.newEmployee,
         promptMessages.removeEmployee,
         promptMessages.updateEmployeeRole,
-        promptMessages.newRole,
         promptMessages.quit
       ]
     })
