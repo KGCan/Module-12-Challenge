@@ -6,7 +6,6 @@ const logo = require("asciiart-logo");
 // const db = require("./db/prompts");
 require("console.table");
 
-// Call start function to open app with logo
 start();
 
 // Prompt messages
@@ -16,14 +15,14 @@ const promptMessages = {
   showEmployeesByManager: "Show all employees by manager",
   showAllRoles: "Show all roles",
   newEmployee: "Add an employee",
-  deleteRole: "Delete a role (Warning this action cannot be undone!",
-  deleteEmployee: "Delete an employee (Warning this action cannot be undone!)",
+  removeRole: "Remove a role (Warning this action cannot be undone!",
+  removeEmployee: "Remove an employee (Warning this action cannot be undone!)",
   updateEmployeeRole: "Update employee role",
   updateEmployeeManager: "Update employee manager",
   newRole: "Add a new role",
   showDepartments: "Show all departments",
   newDepartment: "Add new department",
-  deleteDepartment: "Delete department (Warning this action cannot be undone!)",
+  removeDepartment: "Remove department (Warning this action cannot be undone!)",
   quit: "Quit"
 };
 
@@ -64,14 +63,9 @@ function prompt() {
         promptMessages.showEmployeesByManager,
         promptMessages.showAllRoles,
         promptMessages.newEmployee,
-        promptMessages.deleteRole,
-        promptMessages.deleteEmployee,
+        promptMessages.removeEmployee,
         promptMessages.updateEmployeeRole,
-        promptMessages.updateEmployeeManager,
         promptMessages.newRole,
-        promptMessages.showDepartments,
-        promptMessages.newDepartment,
-        promptMessages.deleteDepartment,
         promptMessages.quit
       ]
     })
@@ -92,18 +86,14 @@ function prompt() {
               break;
 
           case promptMessages.showAllRoles:
-              showRoles();
+              showAllRoles();
               break;
           
               case promptMessages.newEmployee:
               newEmployee();
               break;
               
-          case promptMessages.deleteRole:
-            deleteRole();
-            break;
-
-          case promptMessages.deleteEmployee:
+          case promptMessages.removeEmployee:
               remove("delete");
               break;
 
@@ -111,28 +101,13 @@ function prompt() {
               remove("role");
               break;
 
-          case promptMessages.updateEmployeeManager:
-              updateEmployeeManager();
-              break;
-              
-          case promptMessages.newRole:
-              newRole();
-              break;
-
           case promptMessages.showDepartments:
               showDepartments();
               break;
 
-          case promptMessages.newDepartment:
-              newDepartment();
-              break;
-
-          case promptMessages.deleteDepartment:
-              deleteDepartment();
-              break;
-
           case promptMessages.quit:
-              quit();
+              connection.end();
+              break;
       }
   });
 }
@@ -192,7 +167,7 @@ function showEmployeesByManager() {
 }
 
 // Show all roles
-function showRoles() {
+function showAllRoles() {
   const query = `SELECT role.title, employee.id, employee.first_name, employee.last_name, department.name AS department
   FROM employee
   LEFT JOIN role ON (role.id = employee.role_id)
@@ -274,8 +249,7 @@ function showRoles() {
       });
   });
 
-//--------------------------------------------------------------
-// Delete a role
+// Remove a role
 function remove(input) {
   const promptQuery = {
     yes: "yes",
@@ -290,20 +264,20 @@ inquirer.prompt([
         choices: [promptQuery.yes, promptQuery.no]
     }
 ]).then(answer => {
-    if (input === "delete" && answer.action === "yes") deleteEmployee();
+    if (input === "delete" && answer.action === "yes") removeEmployee();
     else if (input === "role" && answer.action === "yes") updateEmployeeRole();
     else showAllEmployees();
 });
 }
   
-// Delete an employee
-async function deleteEmployee() {
+// Remove an employee
+async function removeEmployee() {
 
   const answer = await inquirer.prompt([
       {
           name: "first",
           type: "input",
-          message: "Enter the ID of the employee you want to delete:  "
+          message: "Enter the ID of the employee you want to remove:  "
       }
   ]);
 
