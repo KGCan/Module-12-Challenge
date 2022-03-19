@@ -47,12 +47,12 @@
             [managerId, employeeId]
         );
      }
-    // Show all employee roles, join with their respective departments to display the name of their department
-    showAllRoles() {
-        return this.connection.promise().query(
-            "SELECT role.id, role.title, department.name AS department, role.salary FROM role LEFT JOIN department on role.department_id = department.id;"
-        );
-    }
+    // // Show all employee roles, join with their respective departments to display the name of their department
+    // showAllRoles() {
+    //     return this.connection.promise().query(
+    //         "SELECT role.id, role.title, department.name AS department, role.salary FROM role LEFT JOIN department on role.department_id = department.id;"
+    //     );
+    // }
 
     // Add new role
     newRole(role) {
