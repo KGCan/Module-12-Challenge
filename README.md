@@ -47,13 +47,13 @@ https://github.com/KGCan/Module-12-Challenge.git
 
 ## Installation
 
-- Install the packages using: 
+### Install the packages using: 
 
-npm install
+- npm install
 
-- Run the app using:
+### Run the app using:
 
-node index.js
+- node index.js
 
 ## Video
 
